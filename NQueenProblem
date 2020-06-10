@@ -1,0 +1,82 @@
+import java.util.Scanner;
+
+public class EVENM {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner scn = new Scanner(System.in);
+
+		int n = scn.nextInt();
+
+		int[][] arr = new int[n][n];
+
+		solveQueen(arr, 0);
+	}
+//checking the upper part of the table that is queen is filled or not
+	public static boolean isItSafe(int[][] arr, int row, int col) {
+//		checking for the upper rows
+		for (int i = 0; i < row; i++) {
+			if (arr[i][col] == 1)
+				return false;
+		}
+
+//		checking for the left diagonal
+		int i = row;
+		int j = col;
+		while (i >= 0 && j >= 0) {
+			if (arr[i][j] == 1)
+				return false;
+			i--;
+			j--;
+		}
+		
+//		checking for the right diagonal
+		i = row;
+		j = col;
+		while (i >= 0 && j < arr[0].length) {
+			if (arr[i][j] == 1) {
+				return false;
+			}
+			i--;
+			j++;
+		}
+
+		return true;
+	}
+
+	public static boolean solveQueen(int[][] arr, int row) {
+//if all the above rows are filled than we will just print the answer
+		if (row == arr.length) {
+			for (int i = 0; i < arr.length; i++) {
+				for (int j = 0; j < arr[0].length; j++) {
+					if (arr[i][j] == 1) {
+						System.out.print("Q" + " ");
+					} else {
+						System.out.print("_" + " ");
+					}
+				}
+				System.out.println();
+			}
+			System.out.println();
+			return false;
+		}
+
+//		we will check for the entire row that is it possible to place the  queen
+		for (int i = 0; i < arr[0].length; i++) {
+
+			if (isItSafe(arr, row, i)) {
+//				given row was safe so we placed it there
+				arr[row][i] = 1;
+//				checking wether we are able to place queen based on above placement
+				boolean next_pe_rakh_paye = solveQueen(arr, row + 1);
+				if (next_pe_rakh_paye) {
+					return true;
+				}
+//				because we were not able to place the queen anywhere in the row due to last queen we will remove it from that place
+				arr[row][i] = 0;
+			}
+		}
+//		if there no  place to put the queen
+		return false;
+	}
+}
